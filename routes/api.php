@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use App\File;
 
 /*
 |--------------------------------------------------------------------------
@@ -16,3 +17,8 @@ use Illuminate\Http\Request;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
+
+
+Route::get('files', 'FileController@index');
+Route::post('files','FileController@store');
+Route::delete('files/{product}', 'FileController@delete');
