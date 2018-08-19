@@ -16,7 +16,11 @@ class FileController extends Controller
      */
     public function index()
     {
-        return File::all();
+        $files = File::all();
+        foreach ($files as $file) {
+            $file->url = asset('/files/'.$file->original_name);
+        }
+        return $files;
     }
 
     /**
@@ -36,7 +40,7 @@ class FileController extends Controller
         $filename = time().$uploadedFile->getClientOriginalName();
 
         Storage::disk('local')->putFileAs(
-          'files/'.$filename,
+          $filename,
           $uploadedFile,
           $filename
         );
@@ -62,7 +66,7 @@ class FileController extends Controller
     {
         $file = File::find($id);
         if (!empty($file)) {
-            Storage::delete($file->original_name);
+            @Storage::delete($file->original_name);
             $file->delete();
             return response()->json(null, 204);
         } else {

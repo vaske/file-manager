@@ -1,16 +1,33 @@
+import React from 'react';
+import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux';
+import { createStore, applyMiddleware } from 'redux';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
+import thunk from 'redux-thunk';
 
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes React and other helpers. It's a great starting point while
- * building robust, powerful web applications using React + Laravel.
- */
+import reducers from './reducers';
+const createStoreWithMiddleware = applyMiddleware(thunk)(createStore);
+const store = createStoreWithMiddleware(reducers);
 
-require('./bootstrap');
+import App from './components/app';
+// import Welcome from './components/welcome';
+/*
+import Login from './components/auth/login';
+import Logout from './components/auth/logout';
+import Register from './components/auth/register';
+import Posts from './components/posts/posts';
+import AuthCheck from './components/auth/auth_check';
+import AddPost from './components/posts/add_post';
+import PostsShow from './components/posts/posts_show';
+import EditPost from './components/posts/edit_post';
+*/
 
-/**
- * Next, we will create a fresh React component instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
 
-require('./components/Main');
+ReactDOM.render(
+    <Provider store={store}>
+        <Router>
+            <Route path="/" component={App} />
+        </Router>
+    </Provider>
+    ,document.getElementById('root'));
+
