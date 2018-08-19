@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use App\File;
+use App\Helpers\FileHelper;
 
 class FileController extends Controller
 {
@@ -42,6 +43,7 @@ class FileController extends Controller
 
         $file = new File;
         $file->original_name = $filename;
+        $file->file_type = FileHelper::detectFileType($uploadedFile->getMimeType());
 
         $file->save();
 
@@ -67,6 +69,29 @@ class FileController extends Controller
             return response()->json('File not exists', 502);
         }
 
+    }
+
+    /**
+     * Find all files with specified type.
+     *
+     * @param  string  $fileType
+     * @return \Illuminate\Http\Response
+     */
+    public function findByType($fileType)
+    {
+        return \DB::table('files')->where('file_type', $fileType)->get();
+    }
+
+    /**
+     * Search files by name.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return \Illuminate\Http\Response
+     */
+    public function findByName(Request $request)
+    {
+        $search = $request->get('q');
+        return \DB::table('files')->where('original_name', 'like', '%'. $search.'%')->get();
     }
 
 }

@@ -21,4 +21,6 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 
 Route::get('files', 'FileController@index');
 Route::post('files','FileController@store');
+Route::get('files/find/{type}','FileController@findByType');
+Route::get('files/search','FileController@findByName');
 Route::delete('files/{product}', 'FileController@delete');
