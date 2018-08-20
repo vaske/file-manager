@@ -83,7 +83,11 @@ class FileController extends Controller
      */
     public function findByType($fileType)
     {
-        return \DB::table('files')->where('file_type', $fileType)->get();
+        $files = \DB::table('files')->where('file_type', $fileType)->get();
+        foreach ($files as $file) {
+            $file->url = asset('/files/'.$file->original_name);
+        }
+        return $files;
     }
 
     /**
@@ -95,7 +99,11 @@ class FileController extends Controller
     public function findByName(Request $request)
     {
         $search = $request->get('q');
-        return \DB::table('files')->where('original_name', 'like', '%'. $search.'%')->get();
+        $files = \DB::table('files')->where('original_name', 'like', '%'. $search.'%')->get();
+        foreach ($files as $file) {
+            $file->url = asset('/files/'.$file->original_name);
+        }
+        return $files;
     }
 
 }
